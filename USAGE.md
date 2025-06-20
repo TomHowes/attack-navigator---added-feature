@@ -566,6 +566,13 @@ Tactic names in the matrix can be customized via the `tactic_mappings` array in 
 
 All techniques referencing any of the listed shortnames will appear under the specified name.
 
+**Steps to verify**
+
+1. Edit `assets/config.json` and populate `tactic_mappings` with your custom values.
+2. From the `nav-app` folder run `npm start`.
+3. Navigate to `http://localhost:4200` in a browser.
+4. Check that the matrix shows your customized tactic labels.
+
 # ![Rendering Layers as SVG](nav-app/src/assets/icons/ic_camera_alt_black_24px.svg)Rendering Layers as SVG
 
 Clicking the "render layer to SVG" button will open a pop-up window allowing the current layer to be rendered to an SVG

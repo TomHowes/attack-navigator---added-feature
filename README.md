@@ -278,6 +278,13 @@ Tactics can be merged or renamed at startup using the `tactic_mappings` option i
 
 Techniques assigned to any listed shortname will appear under the customized tactic name in the matrix.
 
+### Step-by-step
+
+1. Open `nav-app/src/assets/config.json` and locate the `tactic_mappings` array.
+2. Add an entry with a `name` and list of ATT&CK tactic `shortnames` you wish to group.
+3. Run `npm start` from the `nav-app` directory to launch the Navigator locally.
+4. Browse to `http://localhost:4200` and confirm the tactic column headings display your custom names.
+
 ## Embedding the Navigator in a Webpage
 
 If you want to embed the Navigator in a webpage, use an iframe:
