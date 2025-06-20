@@ -474,5 +474,25 @@ describe('DataService', () => {
                 technique_test.get_technique_tactic_id('impact');
             }).toThrowError();
         });
+
+        describe('tactic mappings', () => {
+            beforeEach(() => {
+                configService.tacticNameMap.set('operational / infrastructure alert', 'T1001.003');
+                configService.tacticAliasMap.set('operational / infrastructure alert', 'operational / infrastructure alert');
+                configService.tacticNameMap.set('data access', 'T1002');
+                configService.tacticAliasMap.set('data access', 'data access');
+                configService.tacticNameMap.set('compromised credentials', 'T1003');
+                configService.tacticAliasMap.set('compromised credentials', 'compromised credentials');
+            });
+
+            it('should rename tactics using mapping', () => {
+                let domain = mockService.domains[0];
+                mockService.parseBundles(domain, MockData.mappingBundle);
+                const tacticNames = domain.tactics.map((t) => t.name);
+                expect(tacticNames).toContain('T1001.003');
+                expect(tacticNames).toContain('T1002');
+                expect(tacticNames).toContain('T1003');
+            });
+        });
     });
 });

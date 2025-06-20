@@ -606,3 +606,61 @@ export const invalidMetadata = {
     name: 3,
     value: 4,
 };
+
+// --- tactic mapping test data ---
+export const mappingTactic1 = {
+    ...stixSDO,
+    id: 'tactic-mapping-0',
+    type: 'x-mitre-tactic',
+    name: 'Operational / Infrastructure Alert',
+    x_mitre_shortname: 'operational / infrastructure alert',
+    external_references: [{ external_id: 'TA1001' }],
+};
+export const mappingTactic2 = {
+    ...stixSDO,
+    id: 'tactic-mapping-1',
+    type: 'x-mitre-tactic',
+    name: 'Data Access',
+    x_mitre_shortname: 'data access',
+    external_references: [{ external_id: 'TA1002' }],
+};
+export const mappingTactic3 = {
+    ...stixSDO,
+    id: 'tactic-mapping-2',
+    type: 'x-mitre-tactic',
+    name: 'Compromised Credentials',
+    x_mitre_shortname: 'compromised credentials',
+    external_references: [{ external_id: 'TA1003' }],
+};
+export const mappingTechnique = {
+    ...baseTechniqueSDO,
+    id: 'attack-pattern-mapping-0',
+    kill_chain_phases: [
+        {
+            kill_chain_name: 'mitre-attack',
+            phase_name: 'operational / infrastructure alert',
+        },
+    ],
+    external_references: [{ external_id: 'T1000' }],
+};
+export const mappingMatrix = {
+    ...stixSDO,
+    id: 'matrix-mapping',
+    type: 'x-mitre-matrix',
+    tactic_refs: ['tactic-mapping-0', 'tactic-mapping-1', 'tactic-mapping-2'],
+    external_references: [{ external_id: 'enterprise-attack' }],
+};
+export const mappingBundle = [
+    {
+        type: 'bundle',
+        id: 'bundle-mapping',
+        spec_version: '2.0',
+        objects: [
+            mappingTechnique,
+            mappingTactic1,
+            mappingTactic2,
+            mappingTactic3,
+            mappingMatrix,
+        ],
+    },
+];
