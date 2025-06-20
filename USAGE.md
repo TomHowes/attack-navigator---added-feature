@@ -551,8 +551,20 @@ If you are hosting your own navigator instance, you can also disable features by
 assets/config.json</code>.
 
 The following is an example ATT&CK Navigator URL with the ability to download the layer and add comments
-disabled:  
+disabled:
 <code><https://mitre-attack.github.io/attack-navigator/enterprise/><b>#download_layer=false&comments=false</b></code>
+
+## Tactic Mappings
+
+Tactic names in the matrix can be customized via the `tactic_mappings` array in `assets/config.json`. Provide a `name` for the new tactic column and list of ATT&CK tactic `shortnames` that should be merged.
+
+```json
+"tactic_mappings": [
+    { "name": "Initial Compromise", "shortnames": ["initial-access", "execution"] }
+]
+```
+
+All techniques referencing any of the listed shortnames will appear under the specified name.
 
 # ![Rendering Layers as SVG](nav-app/src/assets/icons/ic_camera_alt_black_24px.svg)Rendering Layers as SVG
 

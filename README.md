@@ -266,6 +266,18 @@ comments present they will still be displayed in tooltips and and marked with an
 
 Features can also be disabled using the _create customized Navigator_ feature. Refer to the in-application help page section "Customizing the Navigator" for more details.
 
+## Custom Tactic Mappings
+
+Tactics can be merged or renamed at startup using the `tactic_mappings` option in `nav-app/src/assets/config.json`. Each entry defines the display `name` and a list of ATT&CK tactic `shortnames` that should be grouped together. The first shortname acts as the canonical identifier.
+
+```json
+"tactic_mappings": [
+    { "name": "Initial Compromise", "shortnames": ["initial-access", "execution"] }
+]
+```
+
+Techniques assigned to any listed shortname will appear under the customized tactic name in the matrix.
+
 ## Embedding the Navigator in a Webpage
 
 If you want to embed the Navigator in a webpage, use an iframe:

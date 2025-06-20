@@ -25,11 +25,22 @@ export class ConfigService {
     public featureList: any[] = [];
     public customizefeatureList: any[] = []
 
+    public tacticNameMap = new Map<string, string>();
+    public tacticAliasMap = new Map<string, string>();
+
     private features = new Map<string, boolean>();
     private featureGroups = new Map<string, string[]>();
 
     public get subtechniquesEnabled(): boolean {
         return this.features.get('subtechniques');
+    }
+
+    public getCanonicalTactic(shortname: string): string {
+        return this.tacticAliasMap.get(shortname) || shortname;
+    }
+
+    public getTacticName(shortname: string): string {
+        return this.tacticNameMap.get(shortname);
     }
 
     constructor(private http: HttpClient) {
@@ -215,6 +226,18 @@ export class ConfigService {
                     this.linkColor = config['link_color'];
                     this.metadataColor = config['metadata_color'];
                     this.banner = config['banner'];
+
+                    if (config['tactic_mappings']) {
+                        config['tactic_mappings'].forEach((mapping) => {
+                            if (mapping.name && Array.isArray(mapping.shortnames) && mapping.shortnames.length) {
+                                const canonical = mapping.shortnames[0];
+                                this.tacticNameMap.set(canonical, mapping.name);
+                                mapping.shortnames.forEach((sn) => {
+                                    this.tacticAliasMap.set(sn, canonical);
+                                });
+                            }
+                        });
+                    }
 
                     // parse feature preferences
                     this.featureList = config['features'];

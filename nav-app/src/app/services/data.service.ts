@@ -61,6 +61,8 @@ export class DataService {
         let matrixSDOs = [];
         let idToTacticSDO = new Map<string, any>();
         let matrixToTechniqueSDOs = new Map<string, any[]>();
+        let aliasToCanonicalID = new Map<string, string>();
+        let canonicalShortnameToID = new Map<string, string>();
         for (let bundle of stixBundles) {
             let techniqueSDOs = [];
             let bundleMatrices = [];
@@ -102,23 +104,45 @@ export class DataService {
                         this.parseRelationship(sdo, domain);
                         break;
                     case 'attack-pattern':
+                        if (sdo.kill_chain_phases) {
+                            sdo.kill_chain_phases = sdo.kill_chain_phases.map((phase) => {
+                                const canon = this.configService.getCanonicalTactic(phase.phase_name);
+                                return { ...phase, phase_name: canon };
+                            }).filter((p, i, arr) => arr.findIndex((x) => x.phase_name === p.phase_name) === i);
+                        }
                         idToTechniqueSDO.set(sdo.id, sdo);
                         if (!sdo.x_mitre_is_subtechnique) {
                             techniqueSDOs.push(sdo);
                         }
                         break;
                     case 'x-mitre-tactic':
-                        idToTacticSDO.set(sdo.id, sdo);
+                        const canonShort = this.configService.getCanonicalTactic(sdo.x_mitre_shortname);
+                        let canonID = canonicalShortnameToID.get(canonShort);
+                        if (!canonID) {
+                            canonID = sdo.id;
+                            canonicalShortnameToID.set(canonShort, canonID);
+                            const copy = { ...sdo, x_mitre_shortname: canonShort };
+                            const newName = this.configService.getTacticName(canonShort);
+                            if (newName) copy.name = newName;
+                            idToTacticSDO.set(canonID, copy);
+                        }
+                        aliasToCanonicalID.set(sdo.id, canonID);
                         break;
                     case 'x-mitre-matrix':
                         matrixSDOs.push(sdo);
                         bundleMatrices.push(sdo);
                         break;
-                    case 'note':
-                        domain.notes.push(new Note(sdo));
-                        break;
-                }
+                case 'note':
+                    domain.notes.push(new Note(sdo));
+                    break;
             }
+        }
+
+        for (let matrixSDO of bundleMatrices) {
+            matrixSDO.tactic_refs = matrixSDO.tactic_refs
+                .map((id) => aliasToCanonicalID.get(id) || id)
+                .filter((id, i, arr) => arr.indexOf(id) === i);
+        }
 
             // create techniques
             this.createTechniques(techniqueSDOs, idToTechniqueSDO, domain);
