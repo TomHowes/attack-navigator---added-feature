@@ -23,6 +23,10 @@
             <td>Comment:</td>
             <td>{{ techniqueVM.comment }}</td>
         </tr>
+        <tr *ngIf="techniqueVM.ruleURL">
+            <td>Rule:</td>
+            <td><a [href]="techniqueVM.ruleURL" target="_blank">open</a></td>
+        </tr>
         <tr *ngFor="let note of notes">
             <td *ngIf="note.abstract" class="wrap">{{ note.abstract }}:</td>
             <td class="wrap" [attr.colspan]="note.abstract ? '1' : '2'">{{ note.content }}</td>

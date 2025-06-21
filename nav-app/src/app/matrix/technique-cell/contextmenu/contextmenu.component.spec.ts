@@ -169,13 +169,13 @@ describe('ContextmenuComponent', () => {
 			expect(component.closeContextmenu).toHaveBeenCalled();
 		});
 
-		it('should open link URL and close context menu', () => {
-			const mockLink = { url: 'https://link-url.com' } as Link;
-			component.openLink(mockLink);
-			expect(window.open).toHaveBeenCalledWith(mockLink.url);
-			expect(component.closeContextmenu).toHaveBeenCalled();
-		});
-	});
+                it('should open rule URL in new tab when present', () => {
+                        const mockLink = { url: 'https://link-url.com', ruleURL: 'https://rule.com' } as Link;
+                        component.openLink(mockLink);
+                        expect(window.open).toHaveBeenCalledWith(mockLink.ruleURL, '_blank');
+                        expect(component.closeContextmenu).toHaveBeenCalled();
+                });
+        });
 
 	describe('pinCell', () => {
 		it('should toggle pinnedCell and close context menu', () => {

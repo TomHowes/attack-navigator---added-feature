@@ -115,7 +115,13 @@ export class ContextmenuComponent extends CellPopover implements OnInit {
     }
 
     public openLink(link: Link) {
-        window.open(link.url);
+        if (link.ruleURL) window.open(link.ruleURL, '_blank');
+        else window.open(link.url);
+        this.closeContextmenu();
+    }
+
+    public openRule() {
+        if (this.techniqueVM.ruleURL) window.open(this.techniqueVM.ruleURL, '_blank');
         this.closeContextmenu();
     }
 }

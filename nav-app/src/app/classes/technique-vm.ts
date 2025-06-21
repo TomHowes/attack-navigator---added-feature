@@ -15,6 +15,7 @@ export class TechniqueVM {
     public color: string = ''; // manually assigned color-class name
     public enabled: boolean = true;
     public comment: string = '';
+    public ruleURL: string = '';
 
     public metadata: Metadata[] = [];
     public get metadataStr(): string {
@@ -49,7 +50,15 @@ export class TechniqueVM {
      * @return true if it has annotations, false otherwise
      */
     public annotated(): boolean {
-        return this.score != '' || this.color != '' || !this.enabled || this.comment != '' || this.links.length !== 0 || this.metadata.length !== 0;
+        return (
+            this.score != '' ||
+            this.color != '' ||
+            !this.enabled ||
+            this.comment != '' ||
+            this.ruleURL != '' ||
+            this.links.length !== 0 ||
+            this.metadata.length !== 0
+        );
     }
 
     /**
@@ -63,6 +72,7 @@ export class TechniqueVM {
         this.aggregateScore = '';
         this.aggregateScoreColor = '';
         this.links = [];
+        this.ruleURL = '';
         this.metadata = [];
     }
 
@@ -84,6 +94,7 @@ export class TechniqueVM {
         if (this.score !== '' && !isNaN(Number(this.score))) rep.score = Number(this.score);
         rep.color = this.color;
         rep.comment = this.comment;
+        if (this.ruleURL) rep.ruleURL = this.ruleURL;
         rep.enabled = this.enabled;
         rep.metadata = this.metadata.filter((m) => m.valid()).map((m) => m.serialize());
         rep.links = this.links.filter((l) => l.valid()).map((l) => l.serialize());
@@ -116,6 +127,10 @@ export class TechniqueVM {
         if ('score' in obj) {
             if (typeof obj.score === 'number') this.score = String(obj.score);
             else console.error('TypeError: technique score field is not a number:', obj.score, '(', typeof obj.score, ')');
+        }
+        if ('ruleURL' in obj) {
+            if (typeof obj.ruleURL === 'string') this.ruleURL = obj.ruleURL;
+            else console.error('TypeError: technique ruleURL field is not a string:', obj.ruleURL, '(', typeof obj.ruleURL, ')');
         }
         if ('enabled' in obj) {
             if (typeof obj.enabled === 'boolean') this.enabled = obj.enabled;
