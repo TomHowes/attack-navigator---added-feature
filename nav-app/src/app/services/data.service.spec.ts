@@ -77,6 +77,31 @@ describe('DataService', () => {
         });
     });
 
+    describe('setup with custom framework', () => {
+        beforeEach(() => {
+            configService.frameworks = [
+                {
+                    name: MockData.simpleFramework.name,
+                    identifier: 'custom',
+                    version: MockData.simpleFramework.version,
+                    file: 'assets/custom-framework.json',
+                },
+            ];
+            configService.versions = { enabled: false, entries: [] };
+            spyOn(DataService.prototype, 'setUpFrameworks').and.callThrough();
+            mockService = new DataService(http, configService);
+            spyOn(http, 'get').and.returnValue(of(MockData.simpleFramework));
+        });
+
+        it('should parse framework data', async () => {
+            const domain = mockService.domains[0];
+            expect(domain.isCustom).toBeTrue();
+            await mockService.loadDomainData(domain.id, false);
+            expect(domain.techniques.length).toEqual(1);
+            expect(domain.tactics.length).toEqual(1);
+        });
+    });
+
     describe('set up via collection index', () => {
         beforeEach(() => {
             dataService.versions = [];

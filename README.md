@@ -1,6 +1,6 @@
 # ATT&CK® Navigator
 
-The ATT&CK Navigator is designed to provide basic navigation and annotation of [ATT&CK](https://attack.mitre.org) matrices, something that people are already doing today in tools like Excel.  We've designed it to be simple and generic - you can use the Navigator to visualize your defensive coverage, your red/blue team planning, the frequency of detected techniques or anything else you want to do.  The Navigator doesn't care - it just allows you to manipulate the cells in the matrix (color coding, adding a comment, assigning a numerical value, etc.).  We thought having a simple tool that everyone could use to visualize the matrix would help make it easy to use ATT&CK.
+The ATT&CK Navigator is designed to provide basic navigation and annotation of [ATT&CK](https://attack.mitre.org) matrices, something that people are already doing today in tools like Excel. We've designed it to be simple and generic - you can use the Navigator to visualize your defensive coverage, your red/blue team planning, the frequency of detected techniques or anything else you want to do. The Navigator doesn't care - it just allows you to manipulate the cells in the matrix (color coding, adding a comment, assigning a numerical value, etc.). We thought having a simple tool that everyone could use to visualize the matrix would help make it easy to use ATT&CK.
 
 The principal feature of the Navigator is the ability for users to define layers - custom views of the ATT&CK knowledge base - e.g. showing just those techniques for a particular platform or highlighting techniques a specific adversary has been known to use. Layers can be created interactively within the Navigator or generated programmatically and then visualized via the Navigator.
 
@@ -22,21 +22,21 @@ Please see [Install and Run](#Install-and-Run) for information on how to get the
 
 Use our [GitHub Issue Tracker](https://github.com/mitre-attack/attack-navigator/issues) to let us know of any bugs or others issues that you encounter. We also encourage pull requests if you've extended the Navigator in a cool way and want to share back to the community!
 
-*See [CONTRIBUTING.md](https://github.com/mitre-attack/attack-navigator/blob/master/CONTRIBUTING.md) for more information on making contributions to the ATT&CK Navigator.*
+_See [CONTRIBUTING.md](https://github.com/mitre-attack/attack-navigator/blob/master/CONTRIBUTING.md) for more information on making contributions to the ATT&CK Navigator._
 
 ## Requirements
 
-* [Node.js v18](https://nodejs.org)
-* [AngularCLI v17](https://cli.angular.io)
+- [Node.js v18](https://nodejs.org)
+- [AngularCLI v17](https://cli.angular.io)
 
 ## Supported Browsers
 
-* Chrome
-* Firefox
-* Internet Explorer 11<sup>[1]</sup>
-* Edge
-* Opera
-* Safari<sup>[2]</sup>
+- Chrome
+- Firefox
+- Internet Explorer 11<sup>[1]</sup>
+- Edge
+- Opera
+- Safari<sup>[2]</sup>
 
 **[1]** There is a recorded issue with the SVG export feature on Internet Explorer. Because of a [missing functionality on SVGElements](https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children) in that browser, text will not be properly vertically centered in SVGs exported in that browser. We recommend switching to a more modern browser for optimal results.
 
@@ -65,9 +65,9 @@ _Note: `ng build --configuration production` does not currently work for ATT&CK 
 
 1. Install the Navigator as per instructions above.
 2. Follow instructions under [loading content from local files](#Loading-content-from-local-files) to configure the Navigator to populate the matrix without an internet connection. The latest MITRE ATT&CK data files can be found here:
-	- [Enterprise ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/enterprise-attack/enterprise-attack.json).
-	- [Mobile ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/mobile-attack/mobile-attack.json).
-	- [ICS ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/ics-attack/ics-attack.json).
+   - [Enterprise ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/enterprise-attack/enterprise-attack.json).
+   - [Mobile ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/mobile-attack/mobile-attack.json).
+   - [ICS ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/ics-attack/ics-attack.json).
 
 ## Documentation
 
@@ -87,42 +87,42 @@ To utilize data on right-clicked technique in the url, parameters surrounded by 
 
 The following data substitutions will be parsed:
 
-* `{{technique_attackID}}` will be substituted with the ATT&CK ID of the technique, e.g `T1234`
-* `{{technique_stixID}}` will be substituted with the STIX ID of the technique, e.g `attack-pattern--12345678-1234-1234-1234-123456789123`
-* `{{technique_name}}` will be substituted with the technique name in lower case and with spaces replaced with hyphens, e.g `example-technique-name`
-* `{{tactic_attackID}}` will be substituted with the ATT&CK ID of the tactic, e.g `TA1234`
-* `{{tactic_stixID}}` will be substituted with the STIX ID of the tactic, e.g `x-mitre-tactic--12345678-1234-1234-1234-123456789123`
-* `{{tactic_name}}` will be substituted with the tactic name in lower case and with spaces replaced with hyphens, e.g `example-tactic`. This is also equivalent to the x_mitre_shortname property of the tactic.
+- `{{technique_attackID}}` will be substituted with the ATT&CK ID of the technique, e.g `T1234`
+- `{{technique_stixID}}` will be substituted with the STIX ID of the technique, e.g `attack-pattern--12345678-1234-1234-1234-123456789123`
+- `{{technique_name}}` will be substituted with the technique name in lower case and with spaces replaced with hyphens, e.g `example-technique-name`
+- `{{tactic_attackID}}` will be substituted with the ATT&CK ID of the tactic, e.g `TA1234`
+- `{{tactic_stixID}}` will be substituted with the STIX ID of the tactic, e.g `x-mitre-tactic--12345678-1234-1234-1234-123456789123`
+- `{{tactic_name}}` will be substituted with the tactic name in lower case and with spaces replaced with hyphens, e.g `example-tactic`. This is also equivalent to the x_mitre_shortname property of the tactic.
 
 Optionally, a `subtechnique_url` field may be added to a custom option. This field will be parsed when the option is used on a sub-technique instead of the normal URL, which will be used for techniques. If `subtechnique_url` is not used, the `technique_` substitutions defined above will refer to the sub-technique object itself.
 
 The following substitutions will be parsed for sub-techniques:
 
-* `{{parent_technique_attackID}}` will be substituted with the ATT&CK ID of the sub-technique's parent, e.g `T1234`
-* `{{parent_technique_stixID}}` will be substituted with the STIX ID of the sub-technique's parent, e.g `attack-pattern--12345678-1234-1234-1234-123456789123`
-* `{{parent_technique_name}}` will be substituted with the name of the sub-technique's parent in lower case and with spaces replaced with hyphens, e.g `example-technique-name`
-* `{{subtechnique_attackID}}` will be substituted with the ATT&CK ID of the sub-technique, e.g `T1234.001`
-* `{{subtechnique_attackID_suffix}}` will be substituted with the portion of the ATT&CK ID of the sub-technique after the delimiting period, e.g `001`
-* `{{subtechnique_stixID}}` will be substituted with the STIX ID of the sub-technique, e.g `attack-pattern--98765432-9876-9876-9876-987654321987`
-* `{{subtechnique_name}}` will be substituted with the sub-technique name in lower case and with spaces replaced with hyphens, e.g `example-subtechnique-name`
-* `{{tactic_attackID}}` will be substituted with the ATT&CK ID of the tactic, e.g `TA1234`
-* `{{tactic_stixID}}` will be substituted with the STIX ID of the tactic, e.g `x-mitre-tactic--12345678-1234-1234-1234-123456789123`
-* `{{tactic_name}}` will be substituted with the tactic name in lower case and with spaces replaced with hyphens, e.g `example-tactic`. This is also equivalent to the x_mitre_shortname property of the tactic.
+- `{{parent_technique_attackID}}` will be substituted with the ATT&CK ID of the sub-technique's parent, e.g `T1234`
+- `{{parent_technique_stixID}}` will be substituted with the STIX ID of the sub-technique's parent, e.g `attack-pattern--12345678-1234-1234-1234-123456789123`
+- `{{parent_technique_name}}` will be substituted with the name of the sub-technique's parent in lower case and with spaces replaced with hyphens, e.g `example-technique-name`
+- `{{subtechnique_attackID}}` will be substituted with the ATT&CK ID of the sub-technique, e.g `T1234.001`
+- `{{subtechnique_attackID_suffix}}` will be substituted with the portion of the ATT&CK ID of the sub-technique after the delimiting period, e.g `001`
+- `{{subtechnique_stixID}}` will be substituted with the STIX ID of the sub-technique, e.g `attack-pattern--98765432-9876-9876-9876-987654321987`
+- `{{subtechnique_name}}` will be substituted with the sub-technique name in lower case and with spaces replaced with hyphens, e.g `example-subtechnique-name`
+- `{{tactic_attackID}}` will be substituted with the ATT&CK ID of the tactic, e.g `TA1234`
+- `{{tactic_stixID}}` will be substituted with the STIX ID of the tactic, e.g `x-mitre-tactic--12345678-1234-1234-1234-123456789123`
+- `{{tactic_name}}` will be substituted with the tactic name in lower case and with spaces replaced with hyphens, e.g `example-tactic`. This is also equivalent to the x_mitre_shortname property of the tactic.
 
 Example custom context menu objects:
 
 ```json
 {
-    "label": "view technique on ATT&CK website",
-    "url": "https://attack.mitre.org/techniques/{{technique_attackID}}",
-    "subtechnique_url": "https://attack.mitre.org/techniques/{{parent_technique_attackID}}/{{subtechnique_attackID_suffix}}"
+  "label": "view technique on ATT&CK website",
+  "url": "https://attack.mitre.org/techniques/{{technique_attackID}}",
+  "subtechnique_url": "https://attack.mitre.org/techniques/{{parent_technique_attackID}}/{{subtechnique_attackID_suffix}}"
 }
 ```
 
 ```json
 {
-    "label": "view tactic on ATT&CK website",
-    "url": "https://attack.mitre.org/tactics/{{tactic_attackID}}"
+  "label": "view tactic on ATT&CK website",
+  "url": "https://attack.mitre.org/tactics/{{tactic_attackID}}"
 }
 ```
 
@@ -135,7 +135,7 @@ By default, the Navigator loads content from the ATT&CK Collection Index hosted 
 1. Modify the `config.json` file located in the `src/assets` directory.
 2. Set the `collection_index_url` property to the URL of your Collection Index (for example, `"collection_index_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/index.json"`)
 
-*Note: For the Navigator to load successfully, either the `collection_index_url` property, the `versions` property, or both must be defined. If both the `collection_index_url` and `versions` properties are defined, the Navigator will display the union of the versions under the "More Options" dropdown in the "Create New Layer" interface. If neither are defined, an alert will be triggered indicating that the Navigator failed to load.*
+_Note: For the Navigator to load successfully, either the `collection_index_url` property, the `versions` property, or both must be defined. If both the `collection_index_url` and `versions` properties are defined, the Navigator will display the union of the versions under the "More Options" dropdown in the "Create New Layer" interface. If neither are defined, an alert will be triggered indicating that the Navigator failed to load._
 
 ### Loading content from a TAXII server
 
@@ -218,6 +218,39 @@ Navigator can be populated using files that consist of bundles of STIX objects, 
 },
 ```
 
+### Using Simplified Framework Files
+
+Instead of full STIX bundles you can provide small JSON files that list tactics and techniques.
+A framework file should look like:
+
+```json
+{
+  "name": "Local Custom Framework",
+  "version": "1",
+  "tactics": [
+    { "id": "custom-tactic-1", "name": "Custom Tactic", "shortname": "custom" }
+  ],
+  "techniques": [
+    {
+      "id": "custom-technique-1",
+      "name": "Custom Technique",
+      "attackID": "CT1",
+      "tactics": ["custom"]
+    }
+  ]
+}
+```
+
+Configure these files in `nav-app/src/assets/config.json`:
+
+```json
+"frameworks": [
+  { "name": "Local Custom Framework", "identifier": "custom", "version": "1", "file": "assets/custom-framework.json" }
+]
+```
+
+Set `versions.enabled` to `false` when only using frameworks to avoid network requests.
+
 ## Running the Docker File
 
 1. Navigate to the directory where you checked out the git repository
@@ -237,13 +270,14 @@ Local files to load should be placed in the `nav-app/src/assets/` directory.
    "default_layers": {
         "enabled": true,
         "urls": [
-            "assets/example.json", 
+            "assets/example.json",
             "https://raw.githubusercontent.com/mitre-attack/attack-navigator/master/layers/samples/Bear_APT.json"
         ]
     }
    ```
 
    would load `example.json` from the local assets directory, and `Bear_APT.json` from this repo's sample layer folder on Github.
+
 3. Load/reload the Navigator
 
 Default layers from the web can also be set using a query string in the Navigator URL. Refer to the in-application help page section "Customizing the Navigator" for more details.
@@ -295,7 +329,7 @@ If you want to embed the Navigator in a webpage, use an iframe:
 
 If you want to embed a version of the Navigator with specific features removed (e.g tabs, adding annotations), or with a default layer, we recommend using the _create customized Navigator_ feature. We highly recommend disabling the "leave site dialog" via this means when embedding the Navigator since otherwise you will be warned whenever you try to leave the embedding page. Refer to the in-application help page section "Customizing the Navigator" for more details.
 
-The following is an example iframe which embeds our [*Bear APTs](layers/samples/Bear_APT.json) layer with tabs and the ability to add annotations removed:
+The following is an example iframe which embeds our [\*Bear APTs](layers/samples/Bear_APT.json) layer with tabs and the ability to add annotations removed:
 
 ```HTML
 <iframe src="https://mitre-attack.github.io/attack-navigator/enterprise/#layerURL=https%3A%2F%2Fraw.githubusercontent.com%2Fmitre%2Fattack-navigator%2Fmaster%2Flayers%2Fdata%2Fsamples%2FBear_APT.json&tabs=false&selecting_techniques=false" width="1000" height="500"></iframe>
@@ -337,7 +371,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   <http://www.apache.org/licenses/LICENSE-2.0>
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

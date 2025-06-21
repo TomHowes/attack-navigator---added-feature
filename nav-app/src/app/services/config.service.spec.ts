@@ -82,6 +82,10 @@ describe('ConfigService', () => {
         expect(() => service.validateConfig(MockData.collectionIndexConfig)).not.toThrow();
     });
 
+    it('should pass validation if only frameworks are configured', () => {
+        expect(() => service.validateConfig(MockData.frameworkConfig)).not.toThrow();
+    });
+
     it('should fail validation if collection_index_url is not a string', () => {
         expect(() => service.validateConfig(MockData.invalidTypeConfig)).toThrowError();
     });

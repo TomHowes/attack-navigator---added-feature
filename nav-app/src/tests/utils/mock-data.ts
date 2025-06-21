@@ -49,6 +49,9 @@ export const invalidConfig = {
     collection_index_url: '',
     versions: {},
 };
+export const frameworkConfig = {
+    frameworks: [{ name: 'Local Custom Framework', identifier: 'custom', version: '1', file: 'assets/custom-framework.json' }],
+};
 export const configDataExtended = {
     enabled: true,
     entries: [
@@ -605,4 +608,11 @@ export const invalidLink = {
 export const invalidMetadata = {
     name: 3,
     value: 4,
+};
+
+export const simpleFramework = {
+    name: 'Local Custom Framework',
+    version: '1',
+    tactics: [{ id: 'custom-tactic-1', name: 'Custom Tactic', shortname: 'custom' }],
+    techniques: [{ id: 'custom-technique-1', name: 'Custom Technique', attackID: 'CT1', tactics: ['custom'] }],
 };
