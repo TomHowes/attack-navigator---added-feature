@@ -11,7 +11,8 @@
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
-    "test": "ng test",
+    "test": "npm run test:cli && ng test --watch=false --browsers=ChromeHeadlessCI",
+    "test:cli": "node ./node_modules/ts-node/dist/bin.js ../utils/generate-layer.spec.ts",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
