@@ -5,7 +5,7 @@
         <b>{{ rec.technique }}</b>
         <ul>
             <li *ngFor="let r of rec.rules">
-                <a [href]="r.path" target="_blank">{{ r.title }}</a>
+                <a [href]="r.url" target="_blank">{{ r.title }}</a>
             </li>
         </ul>
     </div>

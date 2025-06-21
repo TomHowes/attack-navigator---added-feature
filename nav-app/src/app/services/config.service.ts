@@ -25,6 +25,7 @@ export class ConfigService {
     public banner: string;
     public sigmaRulePaths: string[] = [];
     public sigmaMetadataPrompt = false;
+    public sigmaRuleUrlTemplate: string;
     public featureList: any[] = [];
     public customizefeatureList: any[] = [];
 
@@ -229,6 +230,7 @@ export class ConfigService {
                     this.linkColor = config['link_color'];
                     this.metadataColor = config['metadata_color'];
                     this.banner = config['banner'];
+                    this.sigmaRuleUrlTemplate = config['sigma']?.['ruleUrlTemplate'];
                     this.sigmaRulePaths = config['sigma_rule_paths'] || [];
                     this.sigmaMetadataPrompt = config['sigma_metadata_prompt'] || false;
 
