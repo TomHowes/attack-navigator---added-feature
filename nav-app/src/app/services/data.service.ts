@@ -226,7 +226,8 @@ export class DataService {
         }
     }
 
-    public parseFramework(domain: Domain, framework: any): void {
+    public loadSimplifiedFramework(domain: Domain, framework: any): void {
+        console.log('Loaded simplified framework');
         const tactics = framework.tactics || [];
         const techniques = framework.techniques || [];
 
@@ -265,6 +266,13 @@ export class DataService {
 
         const bundle = { type: 'bundle', id: 'bundle--0', spec_version: '2.0', objects: [...tacticSDOs, ...techniqueSDOs, matrixSDO] };
         this.parseBundles(domain, [bundle]);
+    }
+
+    /**
+     * @deprecated use loadSimplifiedFramework instead
+     */
+    public parseFramework(domain: Domain, framework: any): void {
+        this.loadSimplifiedFramework(domain, framework);
     }
 
     /**
@@ -483,7 +491,12 @@ export class DataService {
                 subscription = this.getDomainData(domain, refresh).subscribe({
                     next: (data: Object[]) => {
                         if (domain.isCustom) {
-                            this.parseFramework(domain, data[0]);
+                            const json: any = data[0];
+                            if (json && !Array.isArray(json.objects) && (json.tactics || json.techniques)) {
+                                this.loadSimplifiedFramework(domain, json);
+                            } else {
+                                this.parseBundles(domain, [json]);
+                            }
                         } else {
                             this.parseBundles(domain, data);
                         }
