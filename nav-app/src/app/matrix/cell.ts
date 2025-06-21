@@ -74,6 +74,7 @@ export abstract class Cell {
             (this.tactic && this.viewModel.getTechniqueVM(this.technique, this.tactic).comment.length > 0) ||
             this.viewModel.getTechniqueVM(this.technique, this.tactic).metadata.length > 0 ||
             this.viewModel.getTechniqueVM(this.technique, this.tactic).links.length > 0 ||
+            this.viewModel.getTechniqueVM(this.technique, this.tactic).ruleURL ||
             this.hasNotes()
         )
             theclass += ' underlined';
@@ -150,6 +151,9 @@ export abstract class Cell {
                 if (this.configService.getFeature('metadata_underline')) return this.configService.metadataColor;
             }
             if (tvm.links.length > 0) {
+                if (this.configService.getFeature('link_underline')) return this.configService.linkColor;
+            }
+            if (tvm.ruleURL) {
                 if (this.configService.getFeature('link_underline')) return this.configService.linkColor;
             }
         }

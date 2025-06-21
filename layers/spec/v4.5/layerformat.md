@@ -54,6 +54,7 @@ Technique objects are used to store both techniques and subtechniques. The only 
 | color | String | No | "" | Explicit color value assigned to the technique in this layer. Note that explicitly defined color overrides any color implied by the score - the Navigator will display the technique using the explicitly defined color |
 | metadata | Array of Metadata objects and Divider objects | No | | User defined metadata for this technique. See definitions of Metadata objects and Divider objects below |
 | links | Array of Link objects and Divider objects | No | | User assigned links for this technique. See definitions of Link objects and Divider objects below |
+| ruleURL | String | No | n/a | URL linking to rule details for the technique. Opens in a new browser tab when selected |
 | showSubtechniques | boolean | No | false | if true, the sub-techniques under this technique will be shown by default. This field is only valid under a technique with subtechniques. Note that subtechniques can still be shown/hidden using the UI controls - this field is simply the default state. |
 
 ## Gradient Object properties
@@ -137,6 +138,7 @@ The following example illustrates the layer file format of a single layer:
             "score": 0,
             "color": "#fd8d3c",
             "comment": "This is a comment for technique T1110",
+            "ruleURL": "https://example.com/rules/T1110",
             "showSubtechniques": true
         },
         {
@@ -148,7 +150,8 @@ The following example illustrates the layer file format of a single layer:
                     "label": "Navigator GitHub",
                     "url": "https://github.com/mitre-attack/attack-navigator"
                 }
-            ]
+            ],
+            "ruleURL": "https://example.com/rules/T1110.001"
         },
         {
             "techniqueID": "T1134",
@@ -260,6 +263,7 @@ The following example illustrates the layer file format of multiple layers. The 
                 "score": 0,
                 "color": "#fd8d3c",
                 "comment": "This is a comment for technique T1110",
+                "ruleURL": "https://example.com/rules/T1110",
                 "showSubtechniques": true
             },
             {
@@ -271,7 +275,8 @@ The following example illustrates the layer file format of multiple layers. The 
                         "label": "Navigator GitHub",
                         "url": "https://github.com/mitre-attack/attack-navigator"
                     }
-                ]
+                ],
+                "ruleURL": "https://example.com/rules/T1110.001"
             },
             {
                 "techniqueID": "T1134",
