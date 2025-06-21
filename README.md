@@ -64,10 +64,24 @@ _Note: `ng build --configuration production` does not currently work for ATT&CK 
 ### Running the Navigator offline
 
 1. Install the Navigator as per instructions above.
-2. Follow instructions under [loading content from local files](#Loading-content-from-local-files) to configure the Navigator to populate the matrix without an internet connection. The latest MITRE ATT&CK data files can be found here:
-   - [Enterprise ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/enterprise-attack/enterprise-attack.json).
-   - [Mobile ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/mobile-attack/mobile-attack.json).
-   - [ICS ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/ics-attack/ics-attack.json).
+2. Copy the ATT&CK STIX bundle(s) you wish to use into `nav-app/src/assets/` and
+   update `assets/config.json` to point to those local files. Set
+   `collection_index_url` to an empty string so the Navigator does not attempt to
+   fetch data from the internet.
+3. If you are supplying only [simplified framework files](#using-simplified-framework-files)
+   set `versions.enabled` to `false` to avoid network requests.
+4. The latest ATT&CK data files can be downloaded from the STIX data repository:
+   - [Enterprise ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/enterprise-attack/enterprise-attack.json)
+   - [Mobile ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/mobile-attack/mobile-attack.json)
+   - [ICS ATT&CK](https://github.com/mitre-attack/attack-stix-data/raw/master/ics-attack/ics-attack.json)
+
+#### Troubleshooting Offline Use
+
+- Ensure all URLs in `assets/config.json` reference local paths.
+- Clear the browser cache after changing the configuration so stale network
+  requests are not used.
+- Check the browser developer console for failed network requests which may
+  reveal misconfigured paths.
 
 ## Documentation
 
@@ -329,6 +343,24 @@ Navigator can suggest Sigma detection rules for techniques that have no annotati
 ```
 
 When a layer is uploaded, the sidebar will display recommended Sigma rules with links to the local files.
+
+## Automation Workflow Example
+
+Use the `utils/generate-layer.ts` script to create Navigator layers from
+security platform exports. A sample export is provided in
+`utils/security-platform-export.csv` along with a matching custom framework in
+`nav-app/src/assets/custom-framework.json`.
+
+```bash
+node utils/generate-layer.ts \
+    --rules utils/security-platform-export.csv \
+    --framework nav-app/src/assets/custom-framework.json \
+    --output nav-app/src/assets/generated-layer.json
+```
+
+Add the generated layer path to `default_layers.urls` in
+`nav-app/src/assets/config.json` or reference it with the `layerURL` fragment to
+load the layer automatically.
 
 ## Embedding the Navigator in a Webpage
 

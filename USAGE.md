@@ -551,11 +551,23 @@ Users will not be prompted to upgrade default layers to the current version of A
 The repository provides a small Node script `utils/generate-layer.ts` for
 automatically creating a layer JSON from exported rule data.  The script accepts
 rules in either CSV or JSON format and a custom framework definition mapping
-rule tags to ATT&CK technique IDs.  Running the script produces a layer file
-which can then be loaded by the Navigator.
+rule tags to ATT&CK technique IDs.  A minimal example rule export is available
+under `utils/security-platform-export.csv` alongside a matching framework file
+`nav-app/src/assets/custom-framework.json`. Running the script produces a layer
+file which can then be loaded by the Navigator.
+
+Example CSV export:
 
 ```
-node utils/generate-layer.ts --rules exported_rules.csv --framework framework.json \
+rule_id,tags
+1,attack.T1059;malware
+2,attack.T1105;phishing
+```
+
+```
+node utils/generate-layer.ts \
+    --rules utils/security-platform-export.csv \
+    --framework nav-app/src/assets/custom-framework.json \
     --output nav-app/src/assets/generated-layer.json
 ```
 
@@ -698,3 +710,35 @@ This project makes use of ATT&CK&reg;
 ## Simplified Framework Files
 
 Framework files contain lists of tactics and techniques without STIX formatting. Add them under the `frameworks` array in `assets/config.json` and disable `versions` to operate without network access. See README for an example.
+
+Example framework file (`nav-app/src/assets/custom-framework.json`):
+
+```json
+{
+  "name": "Local Custom Framework",
+  "version": "1",
+  "tactics": [
+    { "id": "custom-tactic-1", "name": "Custom Tactic", "shortname": "custom" }
+  ],
+  "techniques": [
+    { "id": "custom-technique-1", "name": "Custom Technique", "attackID": "CT1", "tactics": ["custom"] }
+  ]
+}
+```
+
+## Offline Setup
+
+1. Place ATT&CK STIX or framework JSON files in `nav-app/src/assets`.
+2. Edit `assets/config.json` so all data references local file paths and set
+   `collection_index_url` to an empty string.
+3. Disable any features that require internet connectivity, such as version
+   checking, by setting `versions.enabled` to `false` when only frameworks are
+   used.
+
+### Troubleshooting
+
+- Verify all URLs in the configuration resolve to existing local files.
+- If the matrix fails to load, open the browser developer console and look for
+  failed network requests.
+- Clear browser caches after modifying `assets/config.json` to ensure the newest
+  configuration is loaded.
