@@ -546,6 +546,24 @@ repo</a>:
 
 Users will not be prompted to upgrade default layers to the current version of ATT&CK if they are outdated.
 
+## Generating Layers from Rule Data
+
+The repository provides a small Node script `utils/generate-layer.ts` for
+automatically creating a layer JSON from exported rule data.  The script accepts
+rules in either CSV or JSON format and a custom framework definition mapping
+rule tags to ATT&CK technique IDs.  Running the script produces a layer file
+which can then be loaded by the Navigator.
+
+```
+node utils/generate-layer.ts --rules exported_rules.csv --framework framework.json \
+    --output nav-app/src/assets/generated-layer.json
+```
+
+Add the generated path to the `default_layers.urls` array in
+`nav-app/src/assets/config.json` or reference it with the `layerURL` fragment to
+have the layer load automatically.  Supplying `--post <url>` will instead POST
+the layer to a remote endpoint.
+
 ## Disabling Features
 
 Individual ATT&CK Navigator features can be disabled with the checkboxes. Removing a feature only removes the interface
