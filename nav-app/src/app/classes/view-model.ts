@@ -106,7 +106,7 @@ export class ViewModel {
         this._sidebarOpened = newVal;
     }
 
-    public readonly sidebarContentTypes = ['layerUpgrade', 'search', 'layerSettings'];
+    public readonly sidebarContentTypes = ['layerUpgrade', 'search', 'layerSettings', 'sigma'];
     private _sidebarContentType: string;
     public get sidebarContentType(): string {
         return this._sidebarContentType;

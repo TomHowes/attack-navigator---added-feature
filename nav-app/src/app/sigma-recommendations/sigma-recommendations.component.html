@@ -1,0 +1,12 @@
+<div class="sigma-recommendations">
+    <h3>Sigma Rule Recommendations</h3>
+    <div *ngIf="!recommendations.length">No recommendations found.</div>
+    <div *ngFor="let rec of recommendations">
+        <b>{{ rec.technique }}</b>
+        <ul>
+            <li *ngFor="let r of rec.rules">
+                <a [href]="r.path" target="_blank">{{ r.title }}</a>
+            </li>
+        </ul>
+    </div>
+</div>

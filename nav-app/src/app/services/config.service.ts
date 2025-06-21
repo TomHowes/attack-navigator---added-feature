@@ -23,6 +23,8 @@ export class ConfigService {
     public linkColor = 'blue';
     public metadataColor = 'purple';
     public banner: string;
+    public sigmaRulePaths: string[] = [];
+    public sigmaMetadataPrompt = false;
     public featureList: any[] = [];
     public customizefeatureList: any[] = [];
 
@@ -227,6 +229,8 @@ export class ConfigService {
                     this.linkColor = config['link_color'];
                     this.metadataColor = config['metadata_color'];
                     this.banner = config['banner'];
+                    this.sigmaRulePaths = config['sigma_rule_paths'] || [];
+                    this.sigmaMetadataPrompt = config['sigma_metadata_prompt'] || false;
 
                     if (config['tactic_mappings']) {
                         config['tactic_mappings'].forEach((mapping) => {

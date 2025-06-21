@@ -1,0 +1,6 @@
+id: example-rule
+title: Example Sigma Rule
+status: experimental
+tags:
+  - attack.t0000
+  - windows
