@@ -16,6 +16,7 @@ export class ConfigService {
         enabled: false,
         entries: [],
     };
+    public frameworks: any[] = [];
     public contextMenuItems: ContextMenuItem[] = [];
     public defaultLayers: any;
     public commentColor = 'yellow';
@@ -23,7 +24,7 @@ export class ConfigService {
     public metadataColor = 'purple';
     public banner: string;
     public featureList: any[] = [];
-    public customizefeatureList: any[] = []
+    public customizefeatureList: any[] = [];
 
     public tacticNameMap = new Map<string, string>();
     public tacticAliasMap = new Map<string, string>();
@@ -197,8 +198,8 @@ export class ConfigService {
      * @returns the configuration, if valid, otherwise throws an error
      */
     public validateConfig(config: any): any {
-        if (!config.collection_index_url && !config.versions?.entries?.length) {
-            throw new Error(`'collection_index_url' or 'versions' must be defined`);
+        if (!config.collection_index_url && !config.versions?.entries?.length && !config.frameworks?.length) {
+            throw new Error(`'collection_index_url', 'versions' or 'frameworks' must be defined`);
         }
         if (config.collection_index_url && typeof config.collection_index_url !== typeof 'string') {
             throw new Error(`'collection_index_url' must be a string`);
@@ -241,7 +242,7 @@ export class ConfigService {
 
                     // parse feature preferences
                     this.featureList = config['features'];
-                    this.customizefeatureList = config['customize_features']
+                    this.customizefeatureList = config['customize_features'];
                     config['features'].forEach((feature) => {
                         this.setFeature_object(feature);
                     });
@@ -258,6 +259,7 @@ export class ConfigService {
 
                     // parse configured domains and versions
                     this.versions = config['versions'];
+                    this.frameworks = config['frameworks'] || [];
                     if (config['collection_index_url']) {
                         return this.http.get(config['collection_index_url']).pipe(
                             tap((_) => console.log('loaded collection index from', config['collection_index_url'])),

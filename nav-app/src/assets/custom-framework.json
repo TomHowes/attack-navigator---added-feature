@@ -1,0 +1,10 @@
+{
+    "name": "Local Custom Framework",
+    "version": "1",
+    "tactics": [
+        { "id": "custom-tactic-1", "name": "Custom Tactic", "shortname": "custom" }
+    ],
+    "techniques": [
+        { "id": "custom-technique-1", "name": "Custom Technique", "attackID": "CT1", "tactics": ["custom"] }
+    ]
+}

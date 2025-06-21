@@ -2,21 +2,30 @@
 	"collection_index_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/index.json",
 
     "versions": {
-		"enabled": false,
-		"entries": [
-			{
-				"name": "Custom Data v14",
-				"version": "14",
-				"domains": [
-					{
-						"name": "Enterprise",
-						"identifier": "enterprise-attack",
-						"data": ["assets/custom-enterprise-attack.json"]
-					}
-				]
-			}
-		]
-	},
+                "enabled": false,
+                "entries": [
+                        {
+                                "name": "Custom Data v14",
+                                "version": "14",
+                                "domains": [
+                                        {
+                                                "name": "Enterprise",
+                                                "identifier": "enterprise-attack",
+                                                "data": ["assets/custom-enterprise-attack.json"]
+                                        }
+                                ]
+                        }
+                ]
+        },
+
+    "frameworks": [
+        {
+            "name": "Local Custom Framework",
+            "identifier": "custom",
+            "version": "1",
+            "file": "assets/custom-framework.json"
+        }
+    ],
 
     "custom_context_menu_items": [
 

@@ -22,6 +22,9 @@ export class DataService {
             // support for workbench integration, taxii and custom data
             this.setUpDomains(configService.versions.entries);
         }
+        if (configService.frameworks?.length) {
+            this.setUpFrameworks(configService.frameworks);
+        }
         if (configService.collectionIndex) {
             // parse versions from collection index
             this.parseCollectionIndex(configService.collectionIndex);
@@ -105,10 +108,12 @@ export class DataService {
                         break;
                     case 'attack-pattern':
                         if (sdo.kill_chain_phases) {
-                            sdo.kill_chain_phases = sdo.kill_chain_phases.map((phase) => {
-                                const canon = this.configService.getCanonicalTactic(phase.phase_name);
-                                return { ...phase, phase_name: canon };
-                            }).filter((p, i, arr) => arr.findIndex((x) => x.phase_name === p.phase_name) === i);
+                            sdo.kill_chain_phases = sdo.kill_chain_phases
+                                .map((phase) => {
+                                    const canon = this.configService.getCanonicalTactic(phase.phase_name);
+                                    return { ...phase, phase_name: canon };
+                                })
+                                .filter((p, i, arr) => arr.findIndex((x) => x.phase_name === p.phase_name) === i);
                         }
                         idToTechniqueSDO.set(sdo.id, sdo);
                         if (!sdo.x_mitre_is_subtechnique) {
@@ -132,17 +137,17 @@ export class DataService {
                         matrixSDOs.push(sdo);
                         bundleMatrices.push(sdo);
                         break;
-                case 'note':
-                    domain.notes.push(new Note(sdo));
-                    break;
+                    case 'note':
+                        domain.notes.push(new Note(sdo));
+                        break;
+                }
             }
-        }
 
-        for (let matrixSDO of bundleMatrices) {
-            matrixSDO.tactic_refs = matrixSDO.tactic_refs
-                .map((id) => aliasToCanonicalID.get(id) || id)
-                .filter((id, i, arr) => arr.indexOf(id) === i);
-        }
+            for (let matrixSDO of bundleMatrices) {
+                matrixSDO.tactic_refs = matrixSDO.tactic_refs
+                    .map((id) => aliasToCanonicalID.get(id) || id)
+                    .filter((id, i, arr) => arr.indexOf(id) === i);
+            }
 
             // create techniques
             this.createTechniques(techniqueSDOs, idToTechniqueSDO, domain);
@@ -219,6 +224,47 @@ export class DataService {
             // add to list of created matrices
             createdMatrixIDs.push(matrixSDO.id);
         }
+    }
+
+    public parseFramework(domain: Domain, framework: any): void {
+        const tactics = framework.tactics || [];
+        const techniques = framework.techniques || [];
+
+        const tacticSDOs = tactics.map((t, i) => ({
+            type: 'x-mitre-tactic',
+            id: t.id || `tactic--${i}`,
+            name: t.name,
+            description: t.description || '',
+            created: new Date().toISOString(),
+            modified: new Date().toISOString(),
+            external_references: [{ external_id: t.id || t.name }],
+            x_mitre_shortname: t.shortname || t.name.toLowerCase().replace(/ /g, '-'),
+        }));
+
+        const techniqueSDOs = techniques.map((tech, i) => ({
+            type: 'attack-pattern',
+            id: tech.id || `attack-pattern--${i}`,
+            name: tech.name,
+            description: tech.description || '',
+            created: new Date().toISOString(),
+            modified: new Date().toISOString(),
+            external_references: [{ external_id: tech.attackID || tech.id || tech.name }],
+            kill_chain_phases: (tech.tactics || []).map((tac) => ({ kill_chain_name: 'mitre-attack', phase_name: tac })),
+        }));
+
+        const matrixSDO = {
+            type: 'x-mitre-matrix',
+            id: 'matrix--0',
+            name: framework.name,
+            description: '',
+            created: new Date().toISOString(),
+            modified: new Date().toISOString(),
+            external_references: [{ external_id: framework.name }],
+            tactic_refs: tacticSDOs.map((t) => t.id),
+        };
+
+        const bundle = { type: 'bundle', id: 'bundle--0', spec_version: '2.0', objects: [...tacticSDOs, ...techniqueSDOs, matrixSDO] };
+        this.parseBundles(domain, [bundle]);
     }
 
     /**
@@ -317,6 +363,15 @@ export class DataService {
                 }
                 this.domains.push(domainObject);
             });
+        });
+    }
+
+    public setUpFrameworks(frameworks: any[]) {
+        frameworks.forEach((fw: any, index: number) => {
+            let v = this.addVersion(fw.name, fw.version);
+            let domain = new Domain(fw.identifier, fw.name, v, [fw.file]);
+            domain.isCustom = true;
+            this.domains.push(domain);
         });
     }
 
@@ -427,7 +482,11 @@ export class DataService {
                 let subscription;
                 subscription = this.getDomainData(domain, refresh).subscribe({
                     next: (data: Object[]) => {
-                        this.parseBundles(domain, data);
+                        if (domain.isCustom) {
+                            this.parseFramework(domain, data[0]);
+                        } else {
+                            this.parseBundles(domain, data);
+                        }
                         resolve(null);
                     },
                     complete: () => {
