@@ -42,6 +42,9 @@
 
     "banner": "",
 
+    "sigma_rule_paths": ["assets/sigma/example.yml"],
+    "sigma_metadata_prompt": false,
+
     "tactic_mappings": [],
 
     "customize_features": [

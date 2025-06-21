@@ -42,6 +42,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { LayerSettingsComponent } from './layer-settings/layer-settings.component';
+import { SigmaRecommendationsComponent } from './sigma-recommendations/sigma-recommendations.component';
 
 import { MarkdownModule } from 'ngx-markdown';
 import { LayerInformationComponent } from './layer-information/layer-information.component';
@@ -73,6 +74,7 @@ import { ConfigService } from './services/config.service';
         ChangelogComponent,
         ListInputComponent,
         LayerSettingsComponent,
+        SigmaRecommendationsComponent,
     ],
     imports: [
         BrowserModule,

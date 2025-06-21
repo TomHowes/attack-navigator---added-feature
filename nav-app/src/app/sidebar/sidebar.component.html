@@ -11,5 +11,8 @@
         <div *ngIf="viewModel.sidebarContentType === 'layerSettings'">
             <app-layer-settings [viewModel]="viewModel"></app-layer-settings>
         </div>
+        <div *ngIf="viewModel.sidebarContentType === 'sigma'">
+            <sigma-recommendations [viewModel]="viewModel"></sigma-recommendations>
+        </div>
     </div>
 </div>

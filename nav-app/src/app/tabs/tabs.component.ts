@@ -2,6 +2,7 @@ import { Component, ViewChild, TemplateRef, AfterViewInit, ViewEncapsulation, In
 import { DataService } from '../services/data.service';
 import { Tab, Domain, Version, ViewModel } from '../classes';
 import { ConfigService } from '../services/config.service';
+import { SigmaRulesService } from '../services/sigma-rules.service';
 import { VersionUpgradeComponent } from '../version-upgrade/version-upgrade.component';
 import { HelpComponent } from '../help/help.component';
 import { SvgExportComponent } from '../svg-export/svg-export.component';
@@ -77,11 +78,13 @@ export class TabsComponent implements AfterViewInit {
         public dialog: MatDialog,
         public viewModelsService: ViewModelsService,
         public dataService: DataService,
+        private sigmaService: SigmaRulesService,
         public http: HttpClient,
         public configService: ConfigService,
         public snackBar: MatSnackBar
     ) {
         console.debug('initializing tabs component');
+        this.sigmaService.loadRules();
         this.newBlankTab();
         this.loadTabs(configService.defaultLayers).then(() => {
             // failed to load from URL, create a new blank layer
@@ -205,9 +208,9 @@ export class TabsComponent implements AfterViewInit {
     public selectTab(tab: Tab): void {
         this.activeTab = tab;
 
-        // close search sidebar
+        // close search and sigma sidebars
         this.viewModelsService.viewModels.forEach((viewModel) => {
-            if (viewModel.sidebarContentType === 'search') {
+            if (viewModel.sidebarContentType === 'search' || viewModel.sidebarContentType === 'sigma') {
                 viewModel.sidebarOpened = false;
                 viewModel.sidebarContentType = '';
             }
@@ -635,7 +638,7 @@ export class TabsComponent implements AfterViewInit {
      * @param {boolean}     defaultLayers is this a layer being loaded by default (from the config or query string)?
      *                      if so, will act as if the user decided not to upgrade the layer
      */
-    public upgradeLayer(oldViewModel: ViewModel, serialized: any, replace: boolean, defaultLayers: boolean = false): Promise<any> {
+    public upgradeLayer(oldViewModel: ViewModel, serialized: any, replace: boolean, defaultLayers: boolean = false): Promise<ViewModel> {
         return new Promise((resolve, reject) => {
             if (!defaultLayers) {
                 this.versionUpgradeDialog(oldViewModel)
@@ -666,7 +669,7 @@ export class TabsComponent implements AfterViewInit {
                                     oldViewModel.deserialize(serialized);
                                     oldViewModel.loadVMData();
                                     newViewModel.initCopyAnnotations();
-                                    resolve(null);
+                                    resolve(newViewModel);
                                     if (dataSubscription) dataSubscription.unsubscribe();
                                 },
                             });
@@ -677,19 +680,19 @@ export class TabsComponent implements AfterViewInit {
                                 this.dataService.loadDomainData(oldViewModel.domainVersionID, true).then(() => {
                                     oldViewModel.deserialize(serialized);
                                     oldViewModel.loadVMData();
-                                    resolve(null);
+                                    resolve(oldViewModel);
                                 });
                             } else {
                                 oldViewModel.deserialize(serialized);
                                 oldViewModel.loadVMData();
-                                resolve(null);
+                                resolve(oldViewModel);
                             }
                         }
                     })
                     .catch((err) => {
                         console.error(err);
                         alert('ERROR parsing file, check the javascript console for more information.');
-                        resolve(null);
+                        resolve(oldViewModel);
                     });
             } else {
                 // default layer, do not upgrade
@@ -698,12 +701,12 @@ export class TabsComponent implements AfterViewInit {
                     this.dataService.loadDomainData(oldViewModel.domainVersionID, true).then(() => {
                         oldViewModel.deserialize(serialized);
                         oldViewModel.loadVMData();
-                        resolve(null);
+                        resolve(oldViewModel);
                     });
                 } else {
                     oldViewModel.deserialize(serialized);
                     oldViewModel.loadVMData();
-                    resolve(null);
+                    resolve(oldViewModel);
                 }
             }
         });
@@ -743,8 +746,10 @@ export class TabsComponent implements AfterViewInit {
 
                         let isCustom = 'customDataURL' in layerObj;
                         if (!isCustom) {
-                            await self.upgradeLayer(viewModel, layerObj, true);
-                            console.debug(`loaded layer "${viewModel.name}"`);
+                            const vm = await self.upgradeLayer(viewModel, layerObj, true);
+                            console.debug(`loaded layer "${vm.name}"`);
+                            const recs = self.sigmaService.getLayerRecommendations(vm);
+                            if (recs.size) vm.openSidebar('sigma');
                         } else {
                             // load as custom data
                             viewModel.deserialize(layerObj);

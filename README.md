@@ -319,6 +319,17 @@ Techniques assigned to any listed shortname will appear under the customized tac
 3. Run `npm start` from the `nav-app` directory to launch the Navigator locally.
 4. Browse to `http://localhost:4200` and confirm the tactic column headings display your custom names.
 
+## Sigma Rule Recommendations
+
+Navigator can suggest Sigma detection rules for techniques that have no annotations. Configure the paths to rule files in `nav-app/src/assets/config.json` using the `sigma_rule_paths` option. Each entry should point to a JSON or YAML file containing Sigma rule metadata. Set `sigma_metadata_prompt` to `true` to prompt for additional metadata when recommendations are shown.
+
+```
+"sigma_rule_paths": ["assets/sigma/example.yml"],
+"sigma_metadata_prompt": false
+```
+
+When a layer is uploaded, the sidebar will display recommended Sigma rules with links to the local files.
+
 ## Embedding the Navigator in a Webpage
 
 If you want to embed the Navigator in a webpage, use an iframe:
