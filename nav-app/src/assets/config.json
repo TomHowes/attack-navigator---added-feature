@@ -42,6 +42,10 @@
 
     "banner": "",
 
+    "sigma": {
+        "ruleUrlTemplate": "https://github.com/SigmaHQ/sigma/blob/main/rules/{platform}/{filename}"
+    },
+
     "sigma_rule_paths": ["assets/sigma/example.yml"],
     "sigma_metadata_prompt": false,
 

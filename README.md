@@ -342,6 +342,18 @@ Navigator can suggest Sigma detection rules for techniques that have no annotati
 "sigma_metadata_prompt": false
 ```
 
+To link recommendations to a remote repository, specify a URL template under the
+`sigma` section of `config.json`:
+
+```
+"sigma": {
+    "ruleUrlTemplate": "https://github.com/SigmaHQ/sigma/blob/main/rules/{platform}/{filename}"
+}
+```
+
+`{platform}` and `{filename}` will be replaced with the directory name and file
+name of each rule. If omitted, rule links fall back to the local path.
+
 When a layer is uploaded, the sidebar will display recommended Sigma rules with links to the local files.
 
 ## Automation Workflow Example

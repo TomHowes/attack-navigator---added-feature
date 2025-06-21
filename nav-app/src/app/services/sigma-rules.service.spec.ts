@@ -24,16 +24,18 @@ describe('SigmaRulesService', () => {
 
     it('should load rules from YAML', async () => {
         config.sigmaRulePaths = ['assets/sigma/example.yml'];
+        config.sigmaRuleUrlTemplate = 'https://example.com/{platform}/{filename}';
         const yaml = `id: example-rule\ntitle: Example\ntags:\n  - attack.t0000`;
         spyOn(http, 'get').and.returnValue(of(yaml));
         await service.loadRules();
         expect(service.rules.length).toBe(1);
         expect(service.rules[0].title).toBe('Example');
         expect(service.rules[0].path).toBe('assets/sigma/example.yml');
+        expect(service.rules[0].url).toBe('https://example.com/sigma/example.yml');
     });
 
     it('should recommend rules for unannotated technique', () => {
-        service.rules = [{ title: 'r', tags: ['T0000'], path: 'p' }];
+        service.rules = [{ title: 'r', tags: ['T0000'], path: 'p', url: 'p' }];
         const tvm = new TechniqueVM('T0000^tactic');
         const vm: any = {
             techniqueVMs: new Map([[tvm.technique_tactic_union_id, tvm]]),
